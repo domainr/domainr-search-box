@@ -43,7 +43,7 @@ Create a `domainr.SearchBox` with `new domainr.SearchBox(options)`. The `options
 * observe: The DOM element to observe.
 * renderTo: The DOM element to contain the rendered autocomplete.
 * renderWith: A function that will render the autocomplete. It will receive a state object.
-* limit: A number for the max number of results to display.
+* limit: A number for the max number of results to display. Optional; default = 20.
 * registrar: Limit the search to results applicable to just this registrar.
 * defaults: Include the given default zones (an array of strings) in your search.
 * onSelect: A function to be called when the user selects a domain. Receives a single object with these properties:
@@ -84,7 +84,7 @@ Select the element you want to observe and call `.domainrSearchBox(options)` on 
 * mashapeKey: Either this or clientId are required.
 * renderTo: Specification for which element to contain the rendered autocomplete. Can be anything jQuery will accept (selector, element, jQuery object).
 * renderWith: A function that will render the autocomplete. It will receive a state object.
-* limit: A number for the max number of results to display.
+* limit: A number for the max number of results to display. Optional; default = 20.
 * registrar: Limit the search to results applicable to just this registrar.
 * defaults: Include the given default zones (an array of strings) in your search.
 * onSelect: A function to be called when the user selects a domain. Receives a single object with these properties:

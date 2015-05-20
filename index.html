@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Simple Domainr Search Demo</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/dist/domainr-search-box.css" />
+    <style>
+      body { text-align: center; }
+      body, input { font-family: "helvetica neue", helvetica, sans-serif; font-size: 18px; }
+      #example { position: relative; width: 320px; margin: 40px auto; text-align: left; }
+      #example input { box-sizing: border-box; width: 100%; border: 1px solid #ccc; border-radius: 2px; padding: 3px 10px; appearance: none; }
+      #example input:focus { outline: none; }
+      #results { position: relative; width: 100%; }
+      #note { font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div id="example">
+      <h1>Simple Domainr Search Demo</h1>
+      <input type="text" id="search" name="search" placeholder="search all domains" autofocus="autofocus" autocomplete="off">
+      <div id="results"></div>
+      <p id="note">Don't forget to update the code of this page with your <tt>clientId</tt> or <tt>mashapeKey</tt>.</p>
+    </div>
+    <script src="/dist/domainr-search-box.min.js"></script>
+    <script>
+      new domainr.SearchBox({
+        // YOUR clientId OR mashapeKey GOES HERE
+        observe: document.getElementById('search'),
+        renderTo: document.getElementById('results'),
+        limit: 10,
+        onSelect: function(result) {
+          window.open('https://next.domainr.com/' + result.domain);
+        }
+      });
+    </script>
+  </body>
+</html>

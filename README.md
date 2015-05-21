@@ -46,7 +46,7 @@ Create a `domainr.SearchBox` with `new domainr.SearchBox(options)`. The `options
 * limit: A number for the max number of results to display. Optional; default = 20.
 * registrar: Limit the search to results applicable to just this registrar.
 * defaults: Include the given default zones (an array of strings) in your search.
-* onSelect: A function to be called when the user selects a domain. Receives a single object with these properties:
+* onSelect: An optional function to be called when the user selects a domain (if omitted, a new window will open with a recommended registrar for that result). Receives a single object with these properties:
   * domain
   * host
   * path
@@ -87,7 +87,7 @@ Select the element you want to observe and call `.domainrSearchBox(options)` on 
 * limit: A number for the max number of results to display. Optional; default = 20.
 * registrar: Limit the search to results applicable to just this registrar.
 * defaults: Include the given default zones (an array of strings) in your search.
-* onSelect: A function to be called when the user selects a domain. Receives a single object with these properties:
+* onSelect: An optional function to be called when the user selects a domain (if omitted, a new window will open with a recommended registrar for that result). Receives a single object with these properties:
   * domain
   * host
   * path

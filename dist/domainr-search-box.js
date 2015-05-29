@@ -160,8 +160,10 @@ Client.prototype = {
     this._get('/zones', {}, callback);
   },
 
-  registerURL: function(domain) {
-    return this._url('/register', {domain: domain});
+  registerURL: function(domain, options) {
+    var params = util.extract(options, ['registrar']);
+    params.domain = domain;
+    return this._url('/register', params);
   },
 
   _get: function(path, params, callback) {
@@ -230,7 +232,7 @@ var SearchBox = function(options) {
   this._state = {
     query: '',
     results: [],
-    limit: -1
+    limit: 20
   }
 
   this._seq = 0
@@ -253,100 +255,45 @@ var SearchBox = function(options) {
   }
 
   if (options.observe !== undefined) {
-    this.observe(options.observe)
+    this._in = options.observe
+    on(this._in, 'keyup', this._input)
+    on(this._in, 'input', this._input)
+    on(this._in, 'change', this._input)
   }
 
   if (options.renderTo !== undefined) {
-    this.renderTo(options.renderTo)
+    this._out = options.renderTo
+    addClass(this._out, 'domainr-results-container')
+    on(this._out, 'click', this._click)
   }
 
   if (options.renderWith !== undefined) {
-    this.renderWith(options.renderWith)
+    this._renderer = options.renderWith
   }
 
   if (options.limit !== undefined) {
-    this.limit(options.limit)
+    this._state.limit = options.limit
   }
 
   if (options.registrar !== undefined) {
-    this.registrar(options.registrar)
+    this._state.registrar = options.registrar
   }
 
   if (options.defaults !== undefined) {
-    this.defaults(options.defaults)
+    this._state.defaults = options.defaults.join(',')
   }
 
   if (options.onSelect !== undefined) {
-    this.on('select', options.onSelect);
+    this._onSelect = options.onSelect
+  } else {
+    this._onSelect = function(result) {
+      _this._in.value = result.domain
+      window.open(_this._client.registerURL(result.domain))
+    }
   }
 }
 
 SearchBox.prototype = {
-  limit: function(n) {
-    this._state.limit = n
-    this._update()
-    return this
-  },
-
-  registrar: function(s) {
-    this._state.registrar = s
-    return this
-  },
-
-  defaults: function(a) {
-    this._state.defaults = a.join(',')
-    return this
-  },
-
-  observe: function(e) {
-    if (this._in) {
-      off(this._in, 'keyup', this._input)
-      off(this._in, 'input', this._input)
-      off(this._in, 'change', this._input)
-    }
-    this._in = e
-    on(e, 'keyup', this._input)
-    on(e, 'input', this._input)
-    on(e, 'change', this._input)
-    return this
-  },
-
-  on: function(type, cb) {
-    var ls = this._listeners[type] || []
-    this._listeners[type] = ls
-    ls.push(cb)
-    return this
-  },
-
-  _emit: function(type, data) {
-    var ls = this._listeners[type]
-    if (!ls) {
-      return
-    }
-    for (var i = 0; i < ls.length; i++) {
-      try {
-        ls[i](data)
-      } catch (e) {
-        util.error(e);
-      }
-    }
-  },
-
-  renderTo: function(e) {
-    if (this._out) {
-      off(this._out, 'click', this._click)
-    }
-    this._out = e
-    addClass(e, 'domainr-results-container')
-    on(e, 'click', this._click)
-    return this
-  },
-
-  renderWith: function(f) {
-    this._renderer = f
-    return this
-  },
-
   _render: function() {
     if (!this._out) {
       return
@@ -427,7 +374,9 @@ SearchBox.prototype = {
         for (var i = 0; i < rs.length; i++) {
           var r = rs[i]
           if (r.domain == d) {
-            this._emit('select', r)
+            if (this._onSelect) {
+              this._onSelect(r);
+            }
             return
           }
         }

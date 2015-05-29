@@ -74,7 +74,7 @@ The domainr.Client has the following methods:
 * options(domain, callback): Call the `options` API with the given domain (a string) and call the callback with the results upon completion.
 * whois(domain, callback): Call the `whois` API with the given domain (a string) and call the callback with the results upon completion.
 * zones(callback): Call the `zones` API and call the callback with the results upon completion.
-* registerURL(domain): Returns a URL for registering the given domain (a string).
+* registerURL(domain, options): Returns a URL for registering the given domain (a string). The options parameter is an object; currently one property is accepted, `registrar`, to specify a specific registrar.
 
 ### jQuery
 
@@ -95,6 +95,14 @@ Select the element you want to observe and call `.domainrSearchBox(options)` on 
   * status
   * subdomain
   * zone
+
+## Development
+
+You'll need to have https://nodejs.org/ and http://gulpjs.com/ installed. Don't forget to `npm install`.
+
+* `gulp build` to build the code.
+* `gulp watch` to watch the code, building on changes.
+* `gulp` runs the demo in a webpage and does a watch on the code.
 
 ## About
 

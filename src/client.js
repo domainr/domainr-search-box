@@ -26,7 +26,7 @@ Client.prototype = {
     util.uniq(domains);
     var params = {
       domain: domains.join(',')
-    }
+    };
     this._get('/status', params, callback);
   },
 

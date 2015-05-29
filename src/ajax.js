@@ -2,12 +2,12 @@
 
 var util = require('./util');
 
-var sequence = 0
+var sequence = 0;
 
 // Detect CORS support
-var cors = false
+var cors = false;
 if ('withCredentials' in xhr()) {
-  cors = true
+  cors = true;
 }
 
 // ----------
@@ -28,7 +28,7 @@ function xhr() {
     var XHR = window.XMLHttpRequest || window.ActiveXObject;
     return new XHR('MSXML2.XMLHTTP.3.0');
   } catch (e) {
-    return {}
+    return {};
   }
 }
 
@@ -55,7 +55,7 @@ function getCORS(url, callback) {
     }
 
     callback(result);
-  }
+  };
 
   x.open('GET', url, true);
   x.send();
@@ -79,7 +79,7 @@ function getJSONP(url, callback) {
       scr.parentNode.removeChild(scr);
       window[id] = undefined;
       try {
-        delete window[id]
+        delete window[id];
       } catch (e) {}
     }, 0);
 

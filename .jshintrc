@@ -1,0 +1,10 @@
+{
+  "browser": true,
+  "browserify": true,
+  "globalstrict": true,
+  "globals": {
+    "domainr": true,
+    "module": true,
+    "require": true
+  }
+}

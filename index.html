@@ -14,7 +14,7 @@
       #example input { box-sizing: border-box; width: 100%; border: 1px solid #ccc; border-radius: 2px; padding: 3px 10px; appearance: none; }
       #example input:focus { outline: none; }
       #results { position: relative; width: 100%; }
-      #note { font-size: 12px; }
+      #note { display: none; font-size: 14px; color: #f00; }
     </style>
   </head>
   <body>
@@ -22,12 +22,28 @@
       <h1>Simple Domainr Search Demo</h1>
       <input type="text" id="search" name="search" placeholder="search all domains" autofocus="autofocus" autocomplete="off">
       <div id="results"></div>
-      <p id="note">Don't forget to update the code of this page with your <tt>clientId</tt> or <tt>mashapeKey</tt>.</p>
+      <p id="note">To make this demo work, make a config.js with your <tt>clientId</tt> or <tt>mashapeKey</tt> and put it in the same directory. See config-sample.js for an example.</p>
     </div>
     <script src="/dist/domainr-search-box.min.js"></script>
+    <script src="config.js"></script>
     <script>
+
+      if (!window.config) {
+        console.error('You need a config.js.');
+        document.getElementById('note').style.display = 'block';
+      }
+
+      if (!config.clientId && !config.mashapeKey) {
+        console.error('Your config needs to specify either a clientId or a mashapeKey.');
+      }
+
+      if (config.clientId && config.mashapeKey) {
+        console.error('Please provide only a clientId or a mashapeKey; not both.');
+      }
+
       new domainr.SearchBox({
-        // YOUR clientId OR mashapeKey GOES HERE
+        clientId: config.clientId,
+        mashapeKey: config.mashapeKey,
         observe: document.getElementById('search'),
         renderTo: document.getElementById('results'),
         limit: 10,
@@ -35,6 +51,7 @@
           window.open('https://domainr.com/' + result.domain);
         }
       });
+
     </script>
   </body>
 </html>

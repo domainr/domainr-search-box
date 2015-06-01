@@ -1,26 +1,26 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.domainr = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict'
 
-var Client = require('./client')
-var SearchBox = require('./search-box')
-require('./jquery')
+var Client = require('./client');
+var SearchBox = require('./search-box');
+require('./jquery');
 
 module.exports = {
   Client: Client,
   SearchBox: SearchBox
-}
+};
 
 },{"./client":3,"./jquery":4,"./search-box":5}],2:[function(require,module,exports){
 'use strict';
 
 var util = require('./util');
 
-var sequence = 0
+var sequence = 0;
 
 // Detect CORS support
-var cors = false
+var cors = false;
 if ('withCredentials' in xhr()) {
-  cors = true
+  cors = true;
 }
 
 // ----------
@@ -41,7 +41,7 @@ function xhr() {
     var XHR = window.XMLHttpRequest || window.ActiveXObject;
     return new XHR('MSXML2.XMLHTTP.3.0');
   } catch (e) {
-    return {}
+    return {};
   }
 }
 
@@ -68,7 +68,7 @@ function getCORS(url, callback) {
     }
 
     callback(result);
-  }
+  };
 
   x.open('GET', url, true);
   x.send();
@@ -92,7 +92,7 @@ function getJSONP(url, callback) {
       scr.parentNode.removeChild(scr);
       window[id] = undefined;
       try {
-        delete window[id]
+        delete window[id];
       } catch (e) {}
     }, 0);
 
@@ -140,7 +140,7 @@ Client.prototype = {
     util.uniq(domains);
     var params = {
       domain: domains.join(',')
-    }
+    };
     this._get('/status', params, callback);
   },
 
@@ -160,8 +160,10 @@ Client.prototype = {
     this._get('/zones', {}, callback);
   },
 
-  registerURL: function(domain) {
-    return this._url('/register', {domain: domain});
+  registerURL: function(domain, options) {
+    var params = util.extract(options, ['registrar']);
+    params.domain = domain;
+    return this._url('/register', params);
   },
 
   _get: function(path, params, callback) {
@@ -221,230 +223,180 @@ if (window.jQuery) {
 },{"./search-box":5,"./util":6}],5:[function(require,module,exports){
 'use strict'
 
-var Client = require('./client')
-var util = require('./util')
+var Client = require('./client');
+var util = require('./util');
 
 var SearchBox = function(options) {
-  options = options || {}
-  this._client = new Client(util.extract(options, ['clientId', 'mashapeKey']))
+  var self = this;
+
+  options = options || {};
+  this._client = new Client(util.extract(options, ['clientId', 'mashapeKey']));
   this._state = {
     query: '',
     results: [],
-    limit: -1
-  }
+    limit: 20
+  };
 
-  this._seq = 0
-  this._last = 0
-  this._cache = {}
-  this._listeners = {}
-  this._renderer = defaultRenderer
+  this._seq = 0;
+  this._last = 0;
+  this._cache = {};
+  this._listeners = {};
+  this._renderer = defaultRenderer;
 
-  var _this = this
   this._input = function() {
-    if (_this._state.query != _this._in.value) {
-      _this._state.query = _this._in.value
-      _this._search()
+    if (self._state.query != self._in.value) {
+      self._state.query = self._in.value;
+      self._search();
     }
-  }
+  };
 
   this._click = function(evt) {
-    evt = evt || window.event
-    _this._choose(evt)
-  }
+    evt = evt || window.event;
+    self._choose(evt);
+  };
 
   if (options.observe !== undefined) {
-    this.observe(options.observe)
+    this._in = options.observe;
+    on(this._in, 'keyup', this._input);
+    on(this._in, 'input', this._input);
+    on(this._in, 'change', this._input);
   }
 
   if (options.renderTo !== undefined) {
-    this.renderTo(options.renderTo)
+    this._out = options.renderTo;
+    addClass(this._out, 'domainr-results-container');
+    on(this._out, 'click', this._click);
   }
 
   if (options.renderWith !== undefined) {
-    this.renderWith(options.renderWith)
+    this._renderer = options.renderWith;
   }
 
   if (options.limit !== undefined) {
-    this.limit(options.limit)
+    this._state.limit = options.limit;
   }
 
   if (options.registrar !== undefined) {
-    this.registrar(options.registrar)
+    this._state.registrar = options.registrar;
   }
 
   if (options.defaults !== undefined) {
-    this.defaults(options.defaults)
+    this._state.defaults = options.defaults.join(',');
   }
 
   if (options.onSelect !== undefined) {
-    this.on('select', options.onSelect);
+    this._onSelect = options.onSelect;
+  } else {
+    this._onSelect = function(result) {
+      self._in.value = result.domain;
+      window.open(self._client.registerURL(result.domain));
+    };
   }
-}
+};
 
 SearchBox.prototype = {
-  limit: function(n) {
-    this._state.limit = n
-    this._update()
-    return this
-  },
-
-  registrar: function(s) {
-    this._state.registrar = s
-    return this
-  },
-
-  defaults: function(a) {
-    this._state.defaults = a.join(',')
-    return this
-  },
-
-  observe: function(e) {
-    if (this._in) {
-      off(this._in, 'keyup', this._input)
-      off(this._in, 'input', this._input)
-      off(this._in, 'change', this._input)
-    }
-    this._in = e
-    on(e, 'keyup', this._input)
-    on(e, 'input', this._input)
-    on(e, 'change', this._input)
-    return this
-  },
-
-  on: function(type, cb) {
-    var ls = this._listeners[type] || []
-    this._listeners[type] = ls
-    ls.push(cb)
-    return this
-  },
-
-  _emit: function(type, data) {
-    var ls = this._listeners[type]
-    if (!ls) {
-      return
-    }
-    for (var i = 0; i < ls.length; i++) {
-      try {
-        ls[i](data)
-      } catch (e) {
-        util.error(e);
-      }
-    }
-  },
-
-  renderTo: function(e) {
-    if (this._out) {
-      off(this._out, 'click', this._click)
-    }
-    this._out = e
-    addClass(e, 'domainr-results-container')
-    on(e, 'click', this._click)
-    return this
-  },
-
-  renderWith: function(f) {
-    this._renderer = f
-    return this
-  },
-
   _render: function() {
     if (!this._out) {
-      return
+      return;
     }
-    this._out.innerHTML = this._renderer(this._state)
-    return this
+    this._out.innerHTML = this._renderer(this._state);
+    return this;
   },
 
   _search: function() {
+    var self = this;
+
     // Try cache first
-    var key = util.qs(this._client.searchParams(this._state))
-    var res = this._cache[key]
+    var key = util.qs(this._client.searchParams(this._state));
+    var res = this._cache[key];
     if (res !== undefined) {
-      this._state.results = res.results
-      this._update()
-      return
+      this._state.results = res.results;
+      this._update();
+      return;
     }
 
     // Make network request
-    var _this = this
-    var seq = this._seq++
+    var seq = this._seq++;
     this._client.search(this._state, function(res) {
-      _this._cache[key] = res
-      if (_this._last > seq) {
-        return
+      self._cache[key] = res;
+      if (self._last > seq) {
+        return;
       }
-      _this._last = seq
-      _this._state.results = res.results
-      _this._update()
-    })
+      self._last = seq;
+      self._state.results = res.results;
+      self._update();
+    });
   },
 
   _update: function() {
-    this._limit()
-    this._status()
-    this._render()
+    this._limit();
+    this._status();
+    this._render();
   },
 
   _limit: function() {
     if (this._state.limit >= 0 && this._state.results.length > this._state.limit) {
-      this._state.results.length = this._state.limit
+      this._state.results.length = this._state.limit;
     }
   },
 
   _status: function() {
+    var self = this;
+
     // Extract domains without status
-    var d = []
-    var rs = this._state.results
+    var d = [];
+    var rs = this._state.results;
     for (var i = 0; i < rs.length; i++) {
-      var r = rs[i]
-      r.status = this._cache[r.domain + ':status'] || r.status
+      var r = rs[i];
+      r.status = this._cache[r.domain + ':status'] || r.status;
       if (!r.status) {
-        r.status = 'unknown'
-        d.push(r.domain)
+        r.status = 'unknown';
+        d.push(r.domain);
       }
     }
     if (d.length === 0) {
-      return
+      return;
     }
 
     // Make network request
-    var _this = this
     this._client.status(d, function(res) {
-      var ss = res.status
+      var ss = res.status;
       for (var i = 0; i < ss.length; i++) {
-        var s = ss[i]
-        _this._cache[s.domain + ':status'] = s.status
+        var s = ss[i];
+        self._cache[s.domain + ':status'] = s.status;
       }
-      _this._update()
-    })
+      self._update();
+    });
   },
 
   _choose: function(evt) {
-    var rs = this._state.results
+    var rs = this._state.results;
     for (var e = evt.target || evt.srcElement; e && e != document; e = e.parentNode) {
-      var d = e.getAttribute('data-domain')
+      var d = e.getAttribute('data-domain');
       if (d) {
         for (var i = 0; i < rs.length; i++) {
-          var r = rs[i]
+          var r = rs[i];
           if (r.domain == d) {
-            this._emit('select', r)
-            return
+            if (this._onSelect) {
+              this._onSelect(r);
+            }
+            return;
           }
         }
       }
     }
   }
-}
+};
 
 function defaultRenderer(state) {
-  var rs = state.results
-  var l = rs.length
+  var rs = state.results;
+  var l = rs.length;
   if (l === 0) {
-    return ''
+    return '';
   }
-  var h = ['<div class="domainr-results">']
+  var h = ['<div class="domainr-results">'];
   for (var i = 0; i < l; i++) {
-    var r = rs[i]
+    var r = rs[i];
     h.push(
       '<div class="domainr-result ' + r.status + '" data-domain="' + r.domain + '">' +
       '<span class="domainr-result-domain">' +
@@ -454,83 +406,83 @@ function defaultRenderer(state) {
       '</span>' + // domainr-domain
       '<span class="domainr-result-path">' + r.path + '</span>' +
       '</div>'
-    )
+    );
   }
-  h.push('</div>')
-  return h.join('')
+  h.push('</div>');
+  return h.join('');
 }
 
 function on(e, ev, cb) {
   if (e.addEventListener) {
-    e.addEventListener(ev, cb, false)
+    e.addEventListener(ev, cb, false);
   } else if (e.attachEvent) {
-    e.attachEvent('on' + ev, cb)
+    e.attachEvent('on' + ev, cb);
   } else {
-    e['on' + ev] = cb
+    e['on' + ev] = cb;
   }
 }
 
 function off(e, ev, cb) {
   if (e.removeEventListener) {
-    e.removeEventListener(ev, cb, false)
+    e.removeEventListener(ev, cb, false);
   } else if (e.detatchEvent) {
-    e.detachEvent('on' + ev, cb)
+    e.detachEvent('on' + ev, cb);
   } else {
-    e['on' + ev] = null
-    delete e['on' + ev]
+    e['on' + ev] = null;
+    delete e['on' + ev];
   }
 }
 
 function addClass(e, className) {
   if (e.classList) {
-    e.classList.add(className)
+    e.classList.add(className);
   } else {
-    e.className += ' ' + className
+    e.className += ' ' + className;
   }
 }
 
-module.exports = SearchBox
+module.exports = SearchBox;
 
 },{"./client":3,"./util":6}],6:[function(require,module,exports){
 'use strict'
 
-var euc = encodeURIComponent
+var euc = encodeURIComponent;
 
 function extract(p, keys) {
-  var x = {}
+  var x = {};
   for (var i = 0; i < keys.length; i++) {
-    var k = keys[i]
+    var k = keys[i];
     if (p[k] !== undefined) {
-      x[k] = p[k]
+      x[k] = p[k];
     }
   }
-  return x
+  return x;
 }
 
 function qs() {
-  var q = []
+  var q = [];
   for (var i = 0; i < arguments.length; i++) {
-    var p = arguments[i]
+    var p = arguments[i];
     for (var k in p) {
-      q.push(euc(k) + '=' + euc(p[k]))
+      q.push(euc(k) + '=' + euc(p[k]));
     }
   }
-  return q.join('&')
+  return q.join('&');
 }
 
 function error(message) {
   if (window.console && window.console.error) {
-    window.console.error('[domainr] ' + message)
+    window.console.error('[domainr] ' + message);
   }
 }
 
 function uniq(a) {
-  var i, j
+  var i, j;
   for (i = 0; i < a.length; i++) {
     for (j = i + 1; j < a.length; j++) {
       if (a[i] === a[j]) {
-        a.splice(j, 1)
-        j--
+        a.splice(j, 1);
+        j--;
       }
     }
   }
@@ -542,7 +494,7 @@ module.exports = {
   qs: qs,
   error: error,
   uniq: uniq
-}
+};
 
 },{}]},{},[1])(1)
 });

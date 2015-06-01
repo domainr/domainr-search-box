@@ -2,6 +2,12 @@
 
 Drop-in Domainr search for your site.
 
+## Installation
+
+`npm install domainr-search-box`
+
+If you'd rather grab the files directly from here, you'll have to build first. See the Development section below.
+
 ## Usage
 
 Include `domainr-search-box.min.js` and `domainr-search-box.css` on your page.

@@ -38,5 +38,8 @@
     "vinyl-buffer": "^1.0.0",
     "browserify": "^10.2.3",
     "http-server": "^0.8.0"
+  },
+  "scripts": {
+    "prepublish": "gulp build"
   }
 }

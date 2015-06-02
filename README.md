@@ -2,6 +2,12 @@
 
 Drop-in Domainr search for your site.
 
+## Installation
+
+`npm install domainr-search-box`
+
+If you'd rather grab the files directly from here, you'll have to build first. See the Development section below.
+
 ## Usage
 
 Include `domainr-search-box.min.js` and `domainr-search-box.css` on your page.
@@ -102,7 +108,9 @@ You'll need to have https://nodejs.org/ and http://gulpjs.com/ installed. Don't 
 
 * `gulp build` to build the code.
 * `gulp watch` to watch the code, building on changes.
-* `gulp` runs the demo in a webpage and does a watch on the code.
+* `gulp` builds + watch, and runs the demo in a webpage.
+
+Note that the demo requires the code to be built. Also, you'll need to get a mashapeKey or clientId and set up a config.js; instructions are in index.html.
 
 ## About
 

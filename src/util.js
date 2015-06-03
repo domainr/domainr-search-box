@@ -4,10 +4,12 @@ var euc = encodeURIComponent;
 
 function extract(p, keys) {
   var x = {};
-  for (var i = 0; i < keys.length; i++) {
-    var k = keys[i];
-    if (p[k] !== undefined) {
-      x[k] = p[k];
+  if (p) {
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (p[k] !== undefined) {
+        x[k] = p[k];
+      }
     }
   }
   return x;

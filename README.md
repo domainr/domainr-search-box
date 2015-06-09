@@ -20,7 +20,8 @@ To authenticate, use the API [for free via Mashape](https://www.mashape.com/nbio
 
 ```javascript
 var box = new domainr.SearchBox({
-    clientId: yourClientId,
+    mashapeKey: yourMashapeKey, // your Mashape API key
+    clientId: yourClientId, // or alternatively your Client ID; not needed if using Mashape
     observe: yourInputElement,
     renderTo: yourResultsElement,
     onSelect: function(result) { ... }
@@ -32,7 +33,8 @@ var box = new domainr.SearchBox({
 ```javascript
 $('input#search')
   .domainrSearchBox({
-    clientId: yourClientId,
+    mashapeKey: yourMashapeKey, // your Mashape API key
+    clientId: yourClientId, // or alternatively your Client ID; not needed if using Mashape
     renderTo: yourResultsElementOrSelector,
     onSelect: function(result) { ... }
   });

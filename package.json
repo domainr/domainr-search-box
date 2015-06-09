@@ -1,7 +1,7 @@
 {
   "name": "domainr-search-box",
   "version": "0.0.1",
-  "description": "Domainr search box for your site",
+  "description": "Domainr instant search box for your site",
   "homepage": "https://github.com/domainr/domainr-search-box",
   "repository": "https://github.com/domainr/domainr-search-box.git",
   "bugs": {
@@ -27,7 +27,10 @@
     "ecosystem:jquery",
     "domainr",
     "domain",
-    "search"
+    "domains",
+    "search",
+    "domain names",
+    "tld"
   ],
   "devDependencies": {
     "opener": "^1.4.1",

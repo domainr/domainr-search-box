@@ -1,16 +1,16 @@
 # Domainr Search Box
 
-Drop-in instant [Domainr](https://domainr.com/) search for your site.
+Drop-in [instant domain search](https://domainr.com/) for your site.
 
 ## Installation
 
-`npm install domainr-search-box`
+Make sure you have [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) installed.
 
-If you'd rather grab the files directly from here, you'll have to build first. See the Development section below.
+Run `npm install domainr-search-box` to create a local copy of the module.
 
 ## Usage
 
-Include `domainr-search-box.min.js` and `domainr-search-box.css` on your page.
+From the `dist/` directory, include `domainr-search-box.min.js` and `domainr-search-box.css` on your page.
 
 Add an empty `div` underneath your `input`; the Domainr Search Box will fill it with results.
 

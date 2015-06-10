@@ -1,0 +1,6 @@
+# This should be identical to .gitignore except we don't want to ignore the dist directory for npm.
+# Also npm automatically ignores node_modules and npm-debug.log.
+
+*.sublime-project
+*.sublime-workspace
+config.js

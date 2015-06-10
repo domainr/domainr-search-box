@@ -82,7 +82,6 @@ The `domainr.Client` has the following methods:
   * `registrar`: String, e.g. `namecheap.com` or `donuts.co`
 * `status(domains, callback)`: Call the `status` API with the given domains (an array) and call the callback with the results upon completion.
 * `options(domain, callback)`: Call the `options` API with the given domain (a string) and call the callback with the results upon completion.
-* `whois(domain, callback)`: Call the `whois` API with the given domain (a string) and call the callback with the results upon completion.
 * `zones(callback)`: Call the `zones` API and call the callback with the results upon completion.
 * `registerURL(domain, options)`: Returns a URL for registering the given domain (a string). The options parameter is an object; currently one property is accepted, `registrar`, to specify a specific registrar.
 

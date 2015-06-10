@@ -43,7 +43,6 @@
     "http-server": "^0.8.0"
   },
   "scripts": {
-    "postinstall": "gulp build",
     "prepublish": "gulp build"
   }
 }

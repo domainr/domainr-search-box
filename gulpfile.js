@@ -10,6 +10,7 @@ var uglify = require('gulp-uglify');
 var fs = require('fs');
 var httpServer = require('http-server');
 var openBrowser = require('opener');
+var minifyCss = require('gulp-minify-css');
 
 var dest = './dist/';
 var basename = 'domainr-search-box';
@@ -51,5 +52,6 @@ gulp.task('js', function() {
 gulp.task('css', function() {
   return gulp.src('./src/index.css')
     .pipe(rename({ basename: basename }))
+    .pipe(minifyCss({ compatibility: 'ie8' }))
     .pipe(gulp.dest(dest));
 });

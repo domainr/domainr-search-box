@@ -36,12 +36,6 @@ Client.prototype = {
     }, callback);
   },
 
-  whois: function(domain, callback) {
-    this._get('/whois', {
-      domain: domain,
-    }, callback);
-  },
-
   zones: function(callback) {
     this._get('/zones', {}, callback);
   },

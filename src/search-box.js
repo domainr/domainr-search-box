@@ -122,8 +122,9 @@ SearchBox.prototype = {
 
     // Extract domains without status
     var d = [];
+    var statusLimit = 10;
     var rs = this._state.results;
-    for (var i = 0; i < rs.length; i++) {
+    for (var i = 0; i < rs.length && d.length < statusLimit; i++) {
       var r = rs[i];
       r.status = this._cache[r.domain + ':status'] || r.status;
       if (!r.status) {

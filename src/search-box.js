@@ -7,6 +7,11 @@ var SearchBox = function(options) {
   var self = this;
 
   options = options || {};
+
+  if (!options.observe) {
+    throw new Error('[domainr] "observe" is required');
+  }
+
   this._client = new Client(util.extract(options, ['clientId', 'mashapeKey']));
   this._state = {
     query: '',
@@ -32,12 +37,10 @@ var SearchBox = function(options) {
     self._choose(evt);
   };
 
-  if (options.observe !== undefined) {
-    this._in = options.observe;
-    on(this._in, 'keyup', this._input);
-    on(this._in, 'input', this._input);
-    on(this._in, 'change', this._input);
-  }
+  this._in = options.observe;
+  on(this._in, 'keyup', this._input);
+  on(this._in, 'input', this._input);
+  on(this._in, 'change', this._input);
 
   if (options.renderTo !== undefined) {
     this._out = options.renderTo;

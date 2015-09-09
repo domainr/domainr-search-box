@@ -33,6 +33,10 @@ function error(message) {
 }
 
 function uniq(a) {
+  if (!a) {
+    return;
+  }
+
   var i, j;
   for (i = 0; i < a.length; i++) {
     for (j = i + 1; j < a.length; j++) {

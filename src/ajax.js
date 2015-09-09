@@ -12,6 +12,10 @@ if ('withCredentials' in xhr()) {
 
 // ----------
 function getJSON(url, callback) {
+  if (!callback) {
+    throw new Error('[domainr] Missing callback');
+  }
+
   if (cors) {
     getCORS(url, callback);
     return;

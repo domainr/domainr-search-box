@@ -8,7 +8,7 @@ function Client(options) {
   this.clientId = options.clientId;
   this.mashapeKey = options.mashapeKey;
   if (!this.clientId && !this.mashapeKey) {
-    throw new Error('Missing mashapeKey or clientId');
+    throw new Error('[domainr] Missing mashapeKey or clientId');
   }
   this.baseURL = options.baseURL || (this.clientId ? 'https://api.domainr.com/v2' : 'https://domainr.p.mashape.com/v2');
 }
@@ -23,6 +23,10 @@ Client.prototype = {
   },
 
   status: function(domains, callback) {
+    if (!domains) {
+      throw new Error('[domainr] domains array is required');
+    }
+
     util.uniq(domains);
     var params = {
       domain: domains.join(',')

@@ -16,7 +16,8 @@ var SearchBox = function(options) {
   this._state = {
     query: '',
     results: [],
-    limit: 20
+    limit: 20,
+    selection: -1
   };
 
   this._seq = 0;
@@ -25,27 +26,16 @@ var SearchBox = function(options) {
   this._listeners = {};
   this._renderer = defaultRenderer;
 
-  this._input = function() {
-    if (self._state.query != self._in.value) {
-      self._state.query = self._in.value;
-      self._search();
-    }
-  };
-
-  this._click = function(evt) {
-    evt = evt || window.event;
-    self._choose(evt);
-  };
-
   this._in = options.observe;
-  on(this._in, 'keyup', this._input);
-  on(this._in, 'input', this._input);
-  on(this._in, 'change', this._input);
+  on(this._in, 'keyup', this._input, this);
+  on(this._in, 'input', this._input, this);
+  on(this._in, 'change', this._input, this);
+  on(this._in, 'keypress', this._keypress, this);
 
   if (options.renderTo !== undefined) {
     this._out = options.renderTo;
     addClass(this._out, 'domainr-results-container');
-    on(this._out, 'click', this._click);
+    on(this._out, 'click', this._click, this);
   }
 
   if (options.renderWith !== undefined) {
@@ -75,6 +65,62 @@ var SearchBox = function(options) {
 };
 
 SearchBox.prototype = {
+  _input: function() {
+    if (this._state.query != this._in.value) {
+      this._state.query = this._in.value;
+      this._search();
+    }
+  },
+
+  _keypress: function(event) {
+    event = event || window.event;
+    var handled = false;
+
+    if (event.keyCode === 38) { // Up arrow
+      handled = true;
+      this._state.selection--;
+      if (this._state.selection < 0) {
+        this._state.selection = this._state.results.length - 1;
+      }
+
+      this._update();
+    } else if (event.keyCode === 40) { // Down arrow
+      handled = true;
+      this._state.selection++;
+      if (this._state.selection >= this._state.results.length) {
+        this._state.selection = 0;
+      }
+
+      this._update();
+    } else if (event.keyCode === 13) { // Enter key
+      if (this._state.selection !== -1) {
+        handled = true;
+        this._choose(this._state.results[this._state.selection]);
+      }
+    }
+
+    if (handled && event.preventDefault) {
+      event.preventDefault();
+    }
+  },
+
+  _click: function(event) {
+    event = event || window.event;
+    var rs = this._state.results;
+    for (var e = event.target || event.srcElement; e && e != document; e = e.parentNode) {
+      var d = e.getAttribute('data-domain');
+      if (d) {
+        for (var i = 0; i < rs.length; i++) {
+          var r = rs[i];
+          if (r.domain == d) {
+            this._choose(r);
+            return;
+          }
+        }
+      }
+    }
+  },
+
   _render: function() {
     if (!this._out) {
       return;
@@ -85,6 +131,7 @@ SearchBox.prototype = {
 
   _search: function() {
     var self = this;
+    this._state.selection = -1;
 
     // Try cache first
     var key = util.qs(this._client.searchParams(this._state));
@@ -150,21 +197,9 @@ SearchBox.prototype = {
     });
   },
 
-  _choose: function(evt) {
-    var rs = this._state.results;
-    for (var e = evt.target || evt.srcElement; e && e != document; e = e.parentNode) {
-      var d = e.getAttribute('data-domain');
-      if (d) {
-        for (var i = 0; i < rs.length; i++) {
-          var r = rs[i];
-          if (r.domain == d) {
-            if (this._onSelect) {
-              this._onSelect(r);
-            }
-            return;
-          }
-        }
-      }
+  _choose: function(result) {
+    if (this._onSelect) {
+      this._onSelect(result);
     }
   }
 };
@@ -178,14 +213,24 @@ function defaultRenderer(state) {
   var h = ['<div class="domainr-results">'];
   for (var i = 0; i < l; i++) {
     var r = rs[i];
+
+    var classNames = [
+      'domainr-result',
+      r.status
+    ];
+
+    if (state.selection === i) {
+      classNames.push('selected');
+    }
+
     h.push(
-      '<div class="domainr-result ' + r.status + '" data-domain="' + r.domain + '">' +
-      '<span class="domainr-result-domain">' +
-      '<span class="domainr-result-host">' + r.host + '</span>' +
-      '<span class="domainr-result-subdomain">' + r.subdomain + '</span>' +
-      '<span class="domainr-result-zone">' + r.zone + '</span>' +
-      '</span>' + // domainr-domain
-      '<span class="domainr-result-path">' + r.path + '</span>' +
+      '<div class="' + classNames.join(' ') + '" data-domain="' + r.domain + '">' +
+        '<span class="domainr-result-domain">' +
+          '<span class="domainr-result-host">' + r.host + '</span>' +
+          '<span class="domainr-result-subdomain">' + r.subdomain + '</span>' +
+          '<span class="domainr-result-zone">' + r.zone + '</span>' +
+        '</span>' +
+        '<span class="domainr-result-path">' + r.path + '</span>' +
       '</div>'
     );
   }
@@ -193,24 +238,19 @@ function defaultRenderer(state) {
   return h.join('');
 }
 
-function on(e, ev, cb) {
+function on(e, ev, cb, obj) {
+  if (obj) {
+    var original = cb;
+    cb = function() {
+      return original.apply(obj, arguments);
+    };
+  }
   if (e.addEventListener) {
     e.addEventListener(ev, cb, false);
   } else if (e.attachEvent) {
     e.attachEvent('on' + ev, cb);
   } else {
     e['on' + ev] = cb;
-  }
-}
-
-function off(e, ev, cb) {
-  if (e.removeEventListener) {
-    e.removeEventListener(ev, cb, false);
-  } else if (e.detatchEvent) {
-    e.detachEvent('on' + ev, cb);
-  } else {
-    e['on' + ev] = null;
-    delete e['on' + ev];
   }
 }
 

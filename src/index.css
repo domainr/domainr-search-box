@@ -107,3 +107,7 @@
   left: -0.3em;
   width: 0;
 }
+
+.domainr-result.selected {
+  background-color: #eee;
+}

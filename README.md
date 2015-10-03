@@ -21,7 +21,7 @@ To authenticate, use the API [for free via Mashape](https://www.mashape.com/nbio
 ```javascript
 var box = new domainr.SearchBox({
     mashapeKey: yourMashapeKey, // your Mashape API key
-    clientId: yourClientId, // or alternatively your Client ID; not needed if using Mashape
+    clientId: yourClientId, // your high-volume clientId; not needed if using Mashape
     observe: yourInputElement,
     renderTo: yourResultsElement,
     onSelect: function(result) { ... }

@@ -30,7 +30,7 @@ var SearchBox = function(options) {
   on(this._in, 'keyup', this._input, this);
   on(this._in, 'input', this._input, this);
   on(this._in, 'change', this._input, this);
-  on(this._in, 'keypress', this._keypress, this);
+  on(this._in, 'keydown', this._keydown, this);
 
   if (options.renderTo !== undefined) {
     this._out = options.renderTo;
@@ -72,7 +72,7 @@ SearchBox.prototype = {
     }
   },
 
-  _keypress: function(event) {
+  _keydown: function(event) {
     event = event || window.event;
     var handled = false;
 

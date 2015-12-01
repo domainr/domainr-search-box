@@ -40,20 +40,25 @@
 }
 
 .domainr-results .active,
-.domainr-results .claimed {
+.domainr-results .claimed,
+.domainr-results .reserved {
   color: #006699;
 }
 
-.domainr-results .inactive {
+.domainr-results .reserved:after {
+  content: "reserved";
+}
+
+.domainr-results .inactive:not(.reserved) {
   color: #009900;
   background: #eeffee;
 }
 
-.domainr-results .inactive:hover {
+.domainr-results .inactive:not(.reserved):hover {
   background: #ddeedd;
 }
 
-.domainr-results .inactive:after {
+.domainr-results .inactive:not(.reserved):after {
   content: "available";
 }
 

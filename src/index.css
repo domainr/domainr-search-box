@@ -74,6 +74,24 @@
   content: "for sale";
 }
 
+.domainr-results .priced {
+  color: #009900;
+  background: #eeffee;
+}
+
+.domainr-results .priced:after {
+  content: "for sale";
+}
+
+.domainr-results .transferable {
+  color: #009900;
+  background: #eeffee;
+}
+
+.domainr-results .transferable:after {
+  content: "for sale";
+}
+
 .domainr-results .premium {
   color: #009900;
   background: #eeffee;

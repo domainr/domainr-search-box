@@ -66,30 +66,26 @@
   content: "new";
 }
 
+.domainr-results .priced,
+.domainr-results .transferable,
 .domainr-results .marketed {
   color: #009900;
 }
 
+.domainr-results .priced:after,
+.domainr-results .transferable:after,
 .domainr-results .marketed:after {
   content: "for sale";
 }
 
-.domainr-results .priced {
-  color: #009900;
-  background: #eeffee;
-}
-
-.domainr-results .priced:after {
-  content: "for sale";
-}
-
+.domainr-results .priced,
 .domainr-results .transferable {
-  color: #009900;
   background: #eeffee;
 }
 
-.domainr-results .transferable:after {
-  content: "for sale";
+.domainr-results .priced:hover,
+.domainr-results .transferable:hover {
+  background: #ddeedd;
 }
 
 .domainr-results .premium {

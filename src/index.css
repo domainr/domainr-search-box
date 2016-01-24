@@ -88,6 +88,16 @@
   background: #ddeedd;
 }
 
+.domainr-results .expiring,
+.domainr-results .deleting {
+  color: #009900;
+}
+
+.domainr-results .expiring:after,
+.domainr-results .deleting:after {
+  content: "expiring";
+}
+
 .domainr-results .premium {
   color: #009900;
   background: #eeffee;

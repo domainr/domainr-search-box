@@ -114,6 +114,12 @@ You'll need to have [Node](https://nodejs.org/) and [Gulp](http://gulpjs.com/) i
 * `gulp watch` to watch the code, building on changes.
 * `gulp` builds + watch, and runs the demo in a webpage.
 
+### Publishing new versions
+
+- always increment the version
+- `npm whoami` to see your current npm user
+- `npm publish` to publish it
+
 Note that the demo requires the code to be built. Also, you'll need to get a `mashapeKey` or `clientId` and set up a `config.js`; instructions are in `index.html`.
 
-© 2015 nb.io, LLC
+© 2015 Domain Research, LLC

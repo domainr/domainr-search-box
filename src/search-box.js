@@ -156,9 +156,35 @@ SearchBox.prototype = {
   },
 
   _update: function() {
+    this._sort();
     this._limit();
     this._status();
     this._render();
+  },
+
+  _sort: function() {
+    if (!this._state.defaults || !this._state.results) {
+      return;
+    }
+
+    var defaults = this._state.defaults.split(',');
+    this._state.results.sort(function(a, b) {
+      var aIndex = util.indexOf(defaults, a.zone);
+      if (aIndex === -1) {
+        aIndex = defaults.length;
+      }
+
+      var bIndex = util.indexOf(defaults, b.zone);
+      if (bIndex === -1) {
+        bIndex = defaults.length;
+      }
+
+      if (aIndex !== bIndex) {
+        return aIndex - bIndex;
+      }
+
+      return a.domain - b.domain;
+    });
   },
 
   _limit: function() {

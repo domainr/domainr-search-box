@@ -48,10 +48,26 @@ function uniq(a) {
   }
 }
 
+function indexOf(a, v) {
+  if (!a) {
+    return -1;
+  }
+
+  var i;
+  for (i = 0; i < a.length; i++) {
+    if (a[i] === v) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
 module.exports = {
   euc: euc,
   extract: extract,
   qs: qs,
   error: error,
-  uniq: uniq
+  uniq: uniq,
+  indexOf: indexOf
 };

@@ -55,7 +55,7 @@ Create a `domainr.SearchBox` with `new domainr.SearchBox(options)`. The `options
 * `renderWith`: A function that will render the autocomplete. It will receive a state object.
 * `limit`: A number for the max number of results to display. Optional; default = 20.
 * `registrar`: Registrar or Registry domain name, to limit search results to domains supported by a registrar or registry. e.g. `namecheap.com` or `donuts.co`
-* `defaults`: Include the given default zones (an array of strings) in your search, e.g. `["coffee", "cafe", "organic"]`
+* `defaults`: Include the given default zones (an array of strings) in your search, e.g. `["coffee", "cafe", "organic"]`. Results will be sorted according to the order of this array.
 * `onSelect`: An optional function to be called when the user selects a domain (if omitted, a new window will open with a recommended registrar for that result). Receives a single object with these properties:
   * `domain`
   * `host`
@@ -95,7 +95,7 @@ Select the element you want to observe and call `.domainrSearchBox(options)` on 
 * `renderWith`: A function that will render the autocomplete. It will receive a state object.
 * `limit`: A number for the max number of results to display. Optional; default = 20.
 * `registrar`: Registrar or Registry domain name, to limit search results to domains supported by a registrar or registry. e.g. `namecheap.com` or `donuts.co`
-* `defaults`: Include the given default zones (an array of strings) in your search, e.g. `["coffee", "cafe", "organic"]`
+* `defaults`: Include the given default zones (an array of strings) in your search, e.g. `["coffee", "cafe", "organic"]`. Results will be sorted according to the order of this array.
 * `onSelect`: An optional function to be called when the user selects a domain (if omitted, a new window will open with a recommended registrar for that result). Receives a single object with these properties:
   * `domain`
   * `host`

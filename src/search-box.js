@@ -67,6 +67,11 @@ var SearchBox = function(options) {
 SearchBox.prototype = {
   _input: function() {
     if (this._state.query != this._in.value) {
+      if (this._in.value === '') {
+        this._state.results = [];
+        this._update();
+        return;
+      }
       this._state.query = this._in.value;
       this._search();
     }

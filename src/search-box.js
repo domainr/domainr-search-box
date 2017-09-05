@@ -62,6 +62,8 @@ var SearchBox = function(options) {
       window.open(self._client.registerURL(result.domain));
     };
   }
+  
+  this._input(); // In case there's something already in the input
 };
 
 SearchBox.prototype = {

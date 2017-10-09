@@ -66,6 +66,8 @@ var SearchBox = function(options) {
   this._input(); // In case there's something already in the input
 };
 
+var searchTrigger = null;
+
 SearchBox.prototype = {
   _input: function() {
     if (this._state.query != this._in.value) {
@@ -75,7 +77,8 @@ SearchBox.prototype = {
         return;
       }
       this._state.query = this._in.value;
-      this._search();
+      window.clearTimeout(searchTrigger);
+      searchTrigger = window.setTimeout(this._search.bind(this), 500);
     }
   },
 

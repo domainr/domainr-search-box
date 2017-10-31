@@ -24,6 +24,8 @@ var SearchBox = function(options) {
   this._last = 0;
   this._cache = {};
   this._listeners = {};
+  this._searchTimeout = null;
+  this._searchDelay = 250;
   this._renderer = defaultRenderer;
 
   this._in = options.observe;
@@ -53,6 +55,10 @@ var SearchBox = function(options) {
   if (options.defaults !== undefined) {
     this._state.defaults = options.defaults.join(',');
   }
+  
+  if (options.searchDelay !== undefined) {
+    this._searchDelay = options.searchDelay;
+  }
 
   if (options.onSelect !== undefined) {
     this._onSelect = options.onSelect;
@@ -64,14 +70,12 @@ var SearchBox = function(options) {
   }
 };
 
-var searchTrigger = null;
-
 SearchBox.prototype = {
   _input: function() {
     if (this._state.query != this._in.value) {
       this._state.query = this._in.value;
-      window.clearTimeout(searchTrigger);
-      searchTrigger = window.setTimeout(this._search.bind(this), 500);
+      window.clearTimeout(this._searchTimeout);
+      this._searchTimeout = window.setTimeout(this._search.bind(this), this._searchDelay);
     }
   },
 

@@ -54,10 +54,7 @@
   background: #eeffee;
 }
 
-.domainr-results .inactive:not(.reserved):hover {
-  background: #ddeedd;
-}
-
+.domainr-results .inactive:not(.reserved):hover,
 .domainr-results .inactive:not(.reserved).selected {
   background: #ddeedd;
 }
@@ -88,10 +85,7 @@
 }
 
 .domainr-results .priced:hover,
-.domainr-results .transferable:hover {
-  background: #ddeedd;
-}
-
+.domainr-results .transferable:hover,
 .domainr-results .priced.selected,
 .domainr-results .transferable.selected {
   background: #ddeedd;
@@ -112,10 +106,7 @@
   background: #eeffee;
 }
 
-.domainr-results .premium:hover {
-  background: #ddeedd;
-}
-
+.domainr-results .premium:hover,
 .domainr-results .premium.selected {
   background: #ddeedd;
 }

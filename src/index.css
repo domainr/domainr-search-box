@@ -35,8 +35,9 @@
   line-height: inherit;
 }
 
-.domainr-result:hover {
-  background: #eee;
+.domainr-result:hover,
+.domainr-result.selected {
+  background-color: #eee;
 }
 
 .domainr-results .active,
@@ -141,6 +142,3 @@
   width: 0;
 }
 
-.domainr-result.selected {
-  background-color: #eee;
-}

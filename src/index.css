@@ -35,8 +35,9 @@
   line-height: inherit;
 }
 
-.domainr-result:hover {
-  background: #eee;
+.domainr-result:hover,
+.domainr-result.selected {
+  background-color: #eee;
 }
 
 .domainr-results .active,
@@ -54,7 +55,8 @@
   background: #eeffee;
 }
 
-.domainr-results .inactive:not(.reserved):hover {
+.domainr-results .inactive:not(.reserved):hover,
+.domainr-results .inactive:not(.reserved).selected {
   background: #ddeedd;
 }
 
@@ -84,7 +86,9 @@
 }
 
 .domainr-results .priced:hover,
-.domainr-results .transferable:hover {
+.domainr-results .transferable:hover,
+.domainr-results .priced.selected,
+.domainr-results .transferable.selected {
   background: #ddeedd;
 }
 
@@ -103,7 +107,8 @@
   background: #eeffee;
 }
 
-.domainr-results .premium:hover {
+.domainr-results .premium:hover,
+.domainr-results .premium.selected {
   background: #ddeedd;
 }
 
@@ -137,6 +142,3 @@
   width: 0;
 }
 
-.domainr-result.selected {
-  background-color: #eee;
-}

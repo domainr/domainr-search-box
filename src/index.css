@@ -94,7 +94,15 @@
 
 .domainr-results .expiring,
 .domainr-results .deleting {
-  color: #009900;
+  color: #f79a0f;
+  background-color: #fef4e7;
+}
+
+.domainr-results .expiring:hover,
+.domainr-results .deleting:hover,
+.domainr-results .expiring.selected,
+.domainr-results .deleting.selected {
+  background-color: #f2e8dc;
 }
 
 .domainr-results .expiring:after,
@@ -141,4 +149,3 @@
   left: -0.3em;
   width: 0;
 }
-

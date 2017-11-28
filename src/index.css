@@ -64,7 +64,7 @@
   content: "available";
 }
 
-.domainr-results .pending:not(.disallowed):not(.unregistrable):not(.zone):not(.suffix):after {
+.domainr-results .pending:not(.disallowed):not(.invalid):not(.unregistrable):not(.zone):not(.suffix):after {
   content: "new";
 }
 
@@ -130,8 +130,9 @@
 
 .domainr-results .unregistrable,
 .domainr-results .disallowed,
+.domainr-results .invalid,
 .domainr-results .unknown {
-  color: #333333;
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .domainr-results .tld,

@@ -60,7 +60,7 @@
   background: #ddeedd;
 }
 
-.domainr-results .inactive:not(.reserved):after {
+.domainr-results .inactive:not(.reserved):not(.premium):after {
   content: "available";
 }
 

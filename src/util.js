@@ -23,7 +23,7 @@ function qs() {
       q.push(euc(k) + '=' + euc(p[k]));
     }
   }
-  return q.join('&');
+  return q.sort().join('&');
 }
 
 function error(message) {

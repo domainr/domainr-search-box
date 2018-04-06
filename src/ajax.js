@@ -11,17 +11,17 @@ if ('withCredentials' in xhr()) {
 }
 
 // ----------
-function getJSON(url, callback) {
+function getJSON(url, callback, failure) {
   if (!callback) {
     throw new Error('[domainr] Missing callback');
   }
 
   if (cors) {
-    getCORS(url, callback);
+    getCORS(url, callback, failure);
     return;
   }
 
-  getJSONP(url, callback);
+  getJSONP(url, callback, failure);
 }
 
 // ----------
@@ -37,7 +37,8 @@ function xhr() {
 }
 
 // ----------
-function getCORS(url, callback) {
+function getCORS(url, callback, failure) {
+  failure = failure || function() {};
   var x = xhr();
 
   x.onreadystatechange = function() {
@@ -47,6 +48,7 @@ function getCORS(url, callback) {
 
     if (x.status != 200) {
       util.error('Error fetching data: ' + x.responseText);
+      failure();
       return;
     }
 
@@ -55,6 +57,7 @@ function getCORS(url, callback) {
       result = JSON.parse(x.responseText);
     } catch (e) {
       util.error('Unable to parse data: ' + x.responseText + '; ' + e);
+      failure();
       return;
     }
 
@@ -66,13 +69,18 @@ function getCORS(url, callback) {
 }
 
 // ----------
-function getJSONP(url, callback) {
+function getJSONP(url, callback, failure) {
   var script = document.createElement('script');
   script.async = true;
   var id = '_jsonp' + sequence++;
+  var aborted = false;
 
   var timeout = setTimeout(function() {
     util.error('Timeout trying to retrieve ' + url);
+    if (failure) {
+      failure();
+      aborted = true;
+    }
   }, 5000);
 
   window[id] = function(data) {
@@ -87,7 +95,9 @@ function getJSONP(url, callback) {
       } catch (e) {}
     }, 0);
 
-    callback(data);
+    if (!aborted) {
+      callback(data);
+    }
   };
 
   var c = url.indexOf('?') >= 0 ? '&' : '?';

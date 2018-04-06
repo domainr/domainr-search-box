@@ -42,13 +42,16 @@ function getCORS(url, callback, failure) {
   var x = xhr();
 
   x.onreadystatechange = function() {
+    var message;
+    
     if (x.readyState != 4) {
       return;
     }
 
     if (x.status != 200) {
-      util.error('Error fetching data: ' + x.responseText);
-      failure();
+      message = 'Error fetching data: ' + x.responseText;
+      util.error(message);
+      failure({ message: message });
       return;
     }
 
@@ -56,8 +59,9 @@ function getCORS(url, callback, failure) {
     try {
       result = JSON.parse(x.responseText);
     } catch (e) {
-      util.error('Unable to parse data: ' + x.responseText + '; ' + e);
-      failure();
+      message = 'Unable to parse data: ' + x.responseText + '; ' + e;
+      util.error(message);
+      failure({ message: message });
       return;
     }
 
@@ -76,9 +80,10 @@ function getJSONP(url, callback, failure) {
   var aborted = false;
 
   var timeout = setTimeout(function() {
-    util.error('Timeout trying to retrieve ' + url);
+    var message = 'Timeout trying to retrieve ' + url;
+    util.error(message);
     if (failure) {
-      failure();
+      failure({ message: message });
       aborted = true;
     }
   }, 5000);

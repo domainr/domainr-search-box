@@ -23,15 +23,46 @@ Client.prototype = {
   },
 
   status: function(domains, callback) {
+    var self = this;
+    
     if (!domains) {
       throw new Error('[domainr] domains array is required');
     }
 
     util.uniq(domains);
-    var params = {
-      domain: domains.sort().join(',')
+    
+    var output = {
+      status: []
     };
-    this._get('/status', params, callback);
+    
+    var completed = 0;
+    
+    var incrementCompleted = function() {
+      completed++;
+      if (completed === domains.length) {
+        callback(output);
+      }
+    };
+    
+    var doOne = function(domain) {
+      var params = {
+        domain: domain
+      };
+      
+      self._get('/status', params, function(result) {
+        if (result && result.status && result.status[0]) {
+          output.status.push(result.status[0]);
+        } else {
+          util.error('Empty status result', result);
+        }
+
+        incrementCompleted();
+      }, incrementCompleted);
+    };
+    
+    for (var i = 0; i < domains.length; i++) {
+      doOne(domains[i]);
+    }
   },
 
   options: function(domain, callback) {
@@ -50,9 +81,9 @@ Client.prototype = {
     return this._url('/register', params);
   },
 
-  _get: function(path, params, callback) {
+  _get: function(path, params, callback, failure) {
     var url = this.baseURL + path + '?' + util.qs(params || {}, this._key());
-    ajax.getJSON(url, callback);
+    ajax.getJSON(url, callback, failure);
   },
 
   _url: function (path, params) {

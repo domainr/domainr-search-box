@@ -211,10 +211,11 @@ SearchBox.prototype = {
     var self = this;
 
     // Extract domains without status
+    var i;
     var d = [];
     var MAX_STATUS_DOMAINS = 10;
     var rs = this._state.results;
-    for (var i = 0; i < rs.length && d.length < MAX_STATUS_DOMAINS; i++) {
+    for (i = 0; i < rs.length && d.length < MAX_STATUS_DOMAINS; i++) {
       var r = rs[i];
       r.status = this._cache[r.domain + ':status'] || r.status;
       if (!r.status) {
@@ -222,19 +223,26 @@ SearchBox.prototype = {
         d.push(r.domain);
       }
     }
+    
     if (d.length === 0) {
       return;
     }
-
-    // Make network request
-    this._client.status(d, function(res) {
-      var ss = res.status;
-      for (var i = 0; i < ss.length; i++) {
-        var s = ss[i];
-        self._cache[s.domain + ':status'] = s.status;
-      }
-      self._update();
-    });
+    
+    util.uniq(d);
+    
+    var doOne = function(domain) {
+      self._client.status([domain], function(res) {
+        var s = res.status[0];
+        if (s) {
+          self._cache[s.domain + ':status'] = s.status;
+          self._update();
+        }
+      });
+    };
+    
+    for (i = 0; i < d.length; i++) {
+      doOne(d[i]);
+    }
   },
 
   _choose: function(result) {

@@ -11,17 +11,17 @@ if ('withCredentials' in xhr()) {
 }
 
 // ----------
-function getJSON(url, callback) {
+function getJSON(url, callback, failure) {
   if (!callback) {
     throw new Error('[domainr] Missing callback');
   }
 
   if (cors) {
-    getCORS(url, callback);
+    getCORS(url, callback, failure);
     return;
   }
 
-  getJSONP(url, callback);
+  getJSONP(url, callback, failure);
 }
 
 // ----------
@@ -37,16 +37,21 @@ function xhr() {
 }
 
 // ----------
-function getCORS(url, callback) {
+function getCORS(url, callback, failure) {
+  failure = failure || function() {};
   var x = xhr();
 
   x.onreadystatechange = function() {
+    var message;
+    
     if (x.readyState != 4) {
       return;
     }
 
     if (x.status != 200) {
-      util.error('Error fetching data: ' + x.responseText);
+      message = 'Error fetching data: ' + x.responseText;
+      util.error(message);
+      failure({ message: message });
       return;
     }
 
@@ -54,7 +59,9 @@ function getCORS(url, callback) {
     try {
       result = JSON.parse(x.responseText);
     } catch (e) {
-      util.error('Unable to parse data: ' + x.responseText + '; ' + e);
+      message = 'Unable to parse data: ' + x.responseText + '; ' + e;
+      util.error(message);
+      failure({ message: message });
       return;
     }
 
@@ -66,13 +73,27 @@ function getCORS(url, callback) {
 }
 
 // ----------
-function getJSONP(url, callback) {
+// You must provide a success callback, but the failure callback is optional.
+// For each call to getJSONP, you'll get at most 1 callback (either success or failure) call. If you
+// don't provide a failure callback, you might not receive a call at all (if the function doesn't
+// succeed). If you do provide the failure callback, you'll get exactly 1 call, whichever one is
+// appropriate to the result.
+function getJSONP(url, success, failure) {
   var script = document.createElement('script');
   script.async = true;
   var id = '_jsonp' + sequence++;
+  var failureSent = false;
 
   var timeout = setTimeout(function() {
-    util.error('Timeout trying to retrieve ' + url);
+    var message = 'Timeout trying to retrieve ' + url;
+    util.error(message);
+    if (failure) {
+      failure({ message: message });
+      
+      // Here we set a flag so we won't end up sending a success callback later if the result comes
+      // through after the timeout.
+      failureSent = true;
+    }
   }, 5000);
 
   window[id] = function(data) {
@@ -87,7 +108,9 @@ function getJSONP(url, callback) {
       } catch (e) {}
     }, 0);
 
-    callback(data);
+    if (!failureSent) {
+      success(data);
+    }
   };
 
   var c = url.indexOf('?') >= 0 ? '&' : '?';

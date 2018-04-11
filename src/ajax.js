@@ -73,18 +73,26 @@ function getCORS(url, callback, failure) {
 }
 
 // ----------
-function getJSONP(url, callback, failure) {
+// You must provide a success callback, but the failure callback is optional.
+// For each call to getJSONP, you'll get at most 1 callback (either success or failure) call. If you
+// don't provide a failure callback, you might not receive a call at all (if the function doesn't
+// succeed). If you do provide the failure callback, you'll get exactly 1 call, whichever one is
+// appropriate to the result.
+function getJSONP(url, success, failure) {
   var script = document.createElement('script');
   script.async = true;
   var id = '_jsonp' + sequence++;
-  var aborted = false;
+  var failureSent = false;
 
   var timeout = setTimeout(function() {
     var message = 'Timeout trying to retrieve ' + url;
     util.error(message);
     if (failure) {
       failure({ message: message });
-      aborted = true;
+      
+      // Here we set a flag so we won't end up sending a success callback later if the result comes
+      // through after the timeout.
+      failureSent = true;
     }
   }, 5000);
 
@@ -100,8 +108,8 @@ function getJSONP(url, callback, failure) {
       } catch (e) {}
     }, 0);
 
-    if (!aborted) {
-      callback(data);
+    if (!failureSent) {
+      success(data);
     }
   };
 

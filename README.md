@@ -14,7 +14,7 @@ From the `dist/` directory, include `domainr-search-box.min.js` and `domainr-sea
 
 Add an empty `div` underneath your `input`; the Domainr Search Box will fill it with results.
 
-To authenticate, use the API [for free via Mashape](https://www.mashape.com/nbio/domainr/) with your Mashape API key, or [contact us](mailto:partners@domainr.com) regarding high-volume usage.
+To authenticate, use the API [for free via Mashape](https://market.mashape.com/domainr/domainr/) with your Mashape API key, or [contact us](mailto:sales@domainr.com) regarding high-volume usage.
 
 ### Plain JavaScript
 
@@ -124,4 +124,4 @@ You'll need to have [Node](https://nodejs.org/) and [Gulp](http://gulpjs.com/) i
 
 Note that the demo requires the code to be built. Also, you'll need to get a `mashapeKey` or `clientId` and set up a `config.js`; instructions are in `index.html`.
 
-© 2015 Domain Research, LLC
+© 2018 nb.io, LLC

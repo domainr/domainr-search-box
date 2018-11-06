@@ -39,17 +39,21 @@
     "tld"
   ],
   "devDependencies": {
-    "opener": "^1.4.1",
-    "gulp": "^3.8.11",
+    "browserify": "^16.1.1",
+    "graceful-fs": "^4.1.15",
+    "gulp": "^3.9.1",
+    "gulp-minify-css": "^1.1.6",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
-    "vinyl-source-stream": "^2.0.0",
-    "vinyl-buffer": "^1.0.1",
-    "browserify": "^16.1.1",
     "http-server": "^0.11.1",
-    "gulp-minify-css": "^1.1.6"
+    "lodash": "^4.17.11",
+    "minimatch": "^3.0.4",
+    "natives": "^1.1.6",
+    "opener": "^1.4.1",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
-    "prepublish": "gulp build"
+    "prepare": "gulp build"
   }
 }

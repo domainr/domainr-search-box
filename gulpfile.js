@@ -16,26 +16,6 @@ var dest = './dist/';
 var basename = 'domainr-search-box';
 var jsName = basename + '.js';
 
-gulp.task('default', ['serve']);
-
-// ----------
-gulp.task('serve', ['watch'], function() {
-  var port = process.env.PORT || 3100;
-  var server = httpServer.createServer();
-  return server.listen(port, 'localhost', function () {
-    console.log('Server listening at http://localhost:' + port);
-    openBrowser('http://localhost:' + port);
-  });
-});
-
-// ----------
-gulp.task('watch', ['build'], function() {
-  return gulp.watch('src/*.*', ['build']);
-});
-
-// ----------
-gulp.task('build', ['js', 'css']);
-
 // ----------
 gulp.task('js', function() {
   return browserify('./src/index.js', { standalone: 'domainr' })
@@ -55,3 +35,23 @@ gulp.task('css', function() {
     .pipe(minifyCss({ compatibility: 'ie8' }))
     .pipe(gulp.dest(dest));
 });
+
+// ----------
+gulp.task('build', gulp.series(gulp.parallel('js', 'css')));
+
+// ----------
+gulp.task('watch', gulp.series('build'), function() {
+  return gulp.watch('src/*.*', ['build']);
+});
+
+// ----------
+gulp.task('serve', gulp.series('watch'), function() {
+  var port = process.env.PORT || 3100;
+  var server = httpServer.createServer();
+  return server.listen(port, 'localhost', function () {
+    console.log('Server listening at http://localhost:' + port);
+    openBrowser('http://localhost:' + port);
+  });
+});
+
+gulp.task('default', gulp.series('serve'));

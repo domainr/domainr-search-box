@@ -7,7 +7,6 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
-var fs = require('fs');
 var httpServer = require('http-server');
 var openBrowser = require('opener');
 var minifyCss = require('gulp-minify-css');
@@ -17,7 +16,7 @@ var basename = 'domainr-search-box';
 var jsName = basename + '.js';
 
 // ----------
-gulp.task('js', function() {
+gulp.task('js', function () {
   return browserify('./src/index.js', { standalone: 'domainr' })
     .bundle()
     .pipe(source(jsName))
@@ -29,7 +28,7 @@ gulp.task('js', function() {
 });
 
 // ----------
-gulp.task('css', function() {
+gulp.task('css', function () {
   return gulp.src('./src/index.css')
     .pipe(rename({ basename: basename }))
     .pipe(minifyCss({ compatibility: 'ie8' }))
@@ -40,12 +39,13 @@ gulp.task('css', function() {
 gulp.task('build', gulp.series(gulp.parallel('js', 'css')));
 
 // ----------
-gulp.task('watch', gulp.series('build'), function() {
-  return gulp.watch('src/*.*', ['build']);
+var watcher = gulp.watch('src/*.*', gulp.parallel('build'));
+watcher.on('all', function (event, path, stats) {
+  console.log('File ' + path + ' was ' + event + ', running tasks...');
 });
 
 // ----------
-gulp.task('serve', gulp.series('watch'), function() {
+gulp.task('serve', function () {
   var port = process.env.PORT || 3100;
   var server = httpServer.createServer();
   return server.listen(port, 'localhost', function () {

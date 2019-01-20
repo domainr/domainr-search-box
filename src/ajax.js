@@ -43,7 +43,7 @@ function getCORS(url, callback, failure) {
 
   x.onreadystatechange = function() {
     var message;
-
+    
     if (x.readyState != 4) {
       return;
     }
@@ -89,7 +89,7 @@ function getJSONP(url, success, failure) {
     util.error(message);
     if (failure) {
       failure({ message: message });
-
+      
       // Here we set a flag so we won't end up sending a success callback later if the result comes
       // through after the timeout.
       failureSent = true;

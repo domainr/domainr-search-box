@@ -39,17 +39,15 @@ gulp.task('css', function () {
 gulp.task('build', gulp.series(gulp.parallel('js', 'css')));
 
 // ----------
-var watcher = gulp.watch('src/*.*', gulp.parallel('build'));
-watcher.on('all', function (event, path, stats) {
-  console.log('File ' + path + ' was ' + event + ', running tasks...');
-});
-
 gulp.task('watch', function() {
-  console.log('Watching file changes...')
+  var watcher = gulp.watch('src/*.*', gulp.parallel('build'));
+  watcher.on('all', function (event, path, stats) {
+    console.log('File ' + path + ' was ' + event + ', running tasks...');
+  });
 })
 
 // ----------
-gulp.task('serve', function () {
+gulp.task('serve', gulp.series('watch'), function () {
   var port = process.env.PORT || 3100;
   var server = httpServer.createServer();
   return server.listen(port, 'localhost', function () {

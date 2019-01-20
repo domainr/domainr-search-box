@@ -44,6 +44,10 @@ watcher.on('all', function (event, path, stats) {
   console.log('File ' + path + ' was ' + event + ', running tasks...');
 });
 
+gulp.task('watch', function() {
+  console.log('Watching file changes...')
+})
+
 // ----------
 gulp.task('serve', function () {
   var port = process.env.PORT || 3100;

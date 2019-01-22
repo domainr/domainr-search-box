@@ -113,7 +113,8 @@ You'll need to have [Node](https://nodejs.org/) and [Gulp](http://gulpjs.com/) i
 
 * `npm install` to install dependencies
 * `gulp build` to build the code.
-* `gulp watch` to watch the code, building on changes.
+* `gulp watch` to watch the code, building on changes. 
+  * note: console output will appear when files are changed
 * `gulp` builds + watch, and runs the demo in a webpage.
 
 ### Publishing new versions

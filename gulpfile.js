@@ -47,7 +47,7 @@ gulp.task('watch', function() {
 })
 
 // ----------
-gulp.task('serve', gulp.series('watch'), function () {
+gulp.task('serve', function () {
   var port = process.env.PORT || 3100;
   var server = httpServer.createServer();
   return server.listen(port, 'localhost', function () {
@@ -56,4 +56,4 @@ gulp.task('serve', gulp.series('watch'), function () {
   });
 });
 
-gulp.task('default', gulp.series('serve'));
+gulp.task('default', gulp.parallel('serve', 'watch'));

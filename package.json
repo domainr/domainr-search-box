@@ -39,14 +39,14 @@
     "tld"
   ],
   "devDependencies": {
-    "browserify": "^16.1.1",
-    "graceful-fs": "^4.1.15",
-    "gulp": "^4.0.0",
+    "browserify": "^16.5.0",
+    "graceful-fs": "^4.2.2",
+    "gulp": "^4.0.2",
     "gulp-minify-css": "^1.1.6",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "http-server": "^0.11.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "minimatch": "^3.0.4",
     "natives": "^1.1.6",
     "opener": "^1.4.1",

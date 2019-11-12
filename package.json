@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "browserify": "^16.5.0",
-    "graceful-fs": "^4.2.2",
+    "graceful-fs": "^4.2.3",
     "gulp": "^4.0.2",
     "gulp-minify-css": "^1.1.6",
     "gulp-rename": "^1.2.2",

@@ -1,5 +1,6 @@
 # When adding new items here, don't forget to add them to .npmignore as well!
 
+.DS_Store
 *.sublime-project
 *.sublime-workspace
 node_modules

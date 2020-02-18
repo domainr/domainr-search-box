@@ -9,7 +9,7 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var httpServer = require('http-server');
 var openBrowser = require('opener');
-var minifyCss = require('gulp-minify-css');
+var minifyCss = require('gulp-clean-css');
 
 var dest = './dist/';
 var basename = 'domainr-search-box';

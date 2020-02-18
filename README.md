@@ -111,6 +111,7 @@ Select the element you want to observe and call `.domainrSearchBox(options)` on 
 
 You'll need to have [Node](https://nodejs.org/) and [Gulp](http://gulpjs.com/) installed.
 
+* `npm install -g gulp` to install Gulp.
 * `npm install` to install dependencies
 * `gulp build` to build the code.
 * `gulp watch` to watch the code, building on changes. 

@@ -120,7 +120,7 @@ You'll need to have [Node](https://nodejs.org/) and [Gulp](http://gulpjs.com/) i
 
 ### Publishing new versions
 
-- always increment the version
+- Always increment the version
 - `npm whoami` to see your current npm user
 - `npm publish` to publish it
 

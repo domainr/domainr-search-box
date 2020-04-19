@@ -14,14 +14,14 @@ From the `dist/` directory, include `domainr-search-box.min.js` and `domainr-sea
 
 Add an empty `div` underneath your `input`; the Domainr Search Box will fill it with results.
 
-To authenticate, use the API [for free via Mashape](https://market.mashape.com/domainr/domainr/) with your Mashape API key, or [contact us](mailto:sales@domainr.com) regarding high-volume usage.
+To authenticate, use the API [for free via RapidAPI](https://rapidapi.com/domainr/api/Domainr) with your RapidAPI API key, or [contact us](mailto:sales@domainr.com) regarding high-volume usage.
 
 ### Plain JavaScript
 
 ```javascript
 var box = new domainr.SearchBox({
-    mashapeKey: yourMashapeKey, // your Mashape API key
-    clientId: yourClientId, // your high-volume clientId; not needed if using Mashape
+    mashapeKey: yourRapidAPIKey, // your RapidAPI API key
+    // clientId: yourClientId, // your high-volume clientId; not needed if using RapidAPI
     observe: yourInputElement,
     renderTo: yourResultsElement,
     onSelect: function(result) { ... }
@@ -33,8 +33,8 @@ var box = new domainr.SearchBox({
 ```javascript
 $('input#search')
   .domainrSearchBox({
-    mashapeKey: yourMashapeKey, // your Mashape API key
-    clientId: yourClientId, // or alternatively your Client ID; not needed if using Mashape
+    mashapeKey: yourRapidAPIKey, // your RapidAPI API key
+    clientId: yourClientId, // or alternatively your Client ID; not needed if using RapidAPI
     renderTo: yourResultsElementOrSelector,
     onSelect: function(result) { ... }
   });

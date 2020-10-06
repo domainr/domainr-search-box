@@ -10,7 +10,7 @@ function Client(options) {
   if (!this.clientId && !this.mashapeKey) {
     throw new Error('[domainr] Missing mashapeKey or clientId');
   }
-  this.baseURL = options.baseURL || (this.clientId ? 'https://api.domainr.com/v2' : 'https://domainr.p.mashape.com/v2');
+  this.baseURL = options.baseURL || (this.clientId ? 'https://api.domainr.com/v2' : 'https://domainr.p.rapidapi.com/v2');
 }
 
 Client.prototype = {

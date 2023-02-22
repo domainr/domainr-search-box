@@ -47,7 +47,7 @@
     "gulp-uglify": "^3.0.0",
     "http-server": "^14.0.0",
     "lodash": "^4.17.15",
-    "minimatch": "^6.0.4",
+    "minimatch": "^7.0.0",
     "natives": "^1.1.6",
     "opener": "^1.4.1",
     "vinyl-buffer": "^1.0.1",
